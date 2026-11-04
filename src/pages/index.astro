@@ -1,0 +1,160 @@
+---
+import noticias from '../data/noticias.json';
+import '../styles/global.css';
+
+const categorias = ['Brands', 'Focus', 'Reels', 'Time out', 'RPM', 'Lights'];
+
+// Separar una nota principal para la portada y el resto para la cuadrícula
+const notaPrincipal = noticias.length > 0 ? noticias[0] : null;
+const notasDestacadasLaterales = noticias.slice(1, 4);
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soy Laguna | Negocios, Liderazgo y Estilo de Vida</title>
+  </head>
+  <body class="bg-[#fcfbf9] text-neutral-900 font-sans antialiased min-h-screen selection:bg-neutral-900 selection:text-white">
+
+    <!-- Topbar Fecha y Edición -->
+    <div class="border-b border-neutral-200 bg-white py-2 text-[11px] uppercase tracking-widest text-neutral-500">
+      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+        <span>Torreón &bull; Gómez Palacio &bull; Lerdo</span>
+        <span>{new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+      </div>
+    </div>
+
+    <!-- Header Principal Estilo Revista -->
+    <header class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-center md:text-left">
+          <a href="/" class="text-4xl md:text-5xl font-black tracking-tight text-neutral-950 font-serif">
+            SOY LAGUNA
+          </a>
+          <p class="text-[10px] tracking-[0.3em] uppercase text-neutral-600 mt-1 font-medium">Business &amp; Lifestyle Magazine</p>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs font-semibold tracking-wider uppercase">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Actualización en tiempo real</span>
+        </div>
+      </div>
+
+      <!-- Menú de Secciones -->
+      <nav class="border-t border-neutral-200 bg-neutral-950 text-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 flex gap-8 text-[12px] uppercase tracking-[0.18em] font-medium py-3 overflow-x-auto whitespace-nowrap">
+          {categorias.map(cat => (
+            <a href={`#${cat.toLowerCase().replace(' ', '-')}`} class="hover:text-white transition-colors">
+              {cat}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-10 space-y-16">
+
+      <!-- HERO SECTION: Portada de Revista -->
+      {notaPrincipal && (
+        <section class="border-b border-neutral-200 pb-12">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Gran Nota Central -->
+            <div class="lg:col-span-8 bg-white border border-neutral-200 p-8 md:p-12 shadow-sm rounded-sm">
+              <span class="text-xs uppercase tracking-widest font-black text-neutral-700 bg-neutral-100 px-3 py-1 border border-neutral-200 inline-block mb-4">
+                {notaPrincipal.categoria} &bull; Portada
+              </span>
+              <h1 class="text-3xl md:text-4xl font-serif font-black leading-tight text-neutral-950 hover:text-neutral-700 transition-colors">
+                <a href={notaPrincipal.enlace} target="_blank" rel="noopener noreferrer">
+                  {notaPrincipal.titulo}
+                </a>
+              </h1>
+              <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-600">
+                <span>{new Date(notaPrincipal.fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                <a href={notaPrincipal.enlace} target="_blank" rel="noopener noreferrer" class="font-bold uppercase tracking-wider text-neutral-900 hover:underline">
+                  Leer Cobertura Completa &rarr;
+                </a>
+              </div>
+            </div>
+
+            <!-- Columna Lateral de Destacados -->
+            <div class="lg:col-span-4 space-y-6">
+              <h3 class="text-xs uppercase tracking-[0.25em] font-black text-neutral-700 border-b-2 border-neutral-900 pb-2">
+                En Tendencia Laguna
+              </h3>
+              {notasDestacadasLaterales.map(item => (
+                <article class="bg-white p-5 border border-neutral-200 rounded-sm">
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-neutral-600 mb-1 block">
+                    {item.categoria}
+                  </span>
+                  <h4 class="text-sm font-serif font-bold text-neutral-900 leading-snug hover:text-neutral-600 transition-colors">
+                    <a href={item.enlace} target="_blank" rel="noopener noreferrer">
+                      {item.titulo}
+                    </a>
+                  </h4>
+                </article>
+              ))}
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      <!-- SECCIONES EDITORIALES -->
+      {categorias.map(cat => {
+        const notasDeSeccion = noticias.filter(n => n.categoria === cat);
+        if (notasDeSeccion.length === 0) return null;
+
+        return (
+          <section id={cat.toLowerCase().replace(' ', '-')} class="scroll-mt-24">
+            <div class="flex items-baseline justify-between border-b border-neutral-900 pb-2 mb-6">
+              <h2 class="text-2xl font-serif font-black tracking-tight text-neutral-950 uppercase">
+                {cat}
+              </h2>
+              <span class="text-[11px] uppercase tracking-widest text-neutral-600 font-semibold">
+                {notasDeSeccion.length} Artículos
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {notasDeSeccion.map(item => (
+                <article class="bg-white border border-neutral-200 p-6 flex flex-col justify-between rounded-sm hover:border-neutral-400 transition-all">
+                  <div>
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-neutral-600 mb-2 block">
+                      {item.categoria}
+                    </span>
+                    <h3 class="text-base font-serif font-bold leading-snug text-neutral-900 hover:text-neutral-600 transition-colors line-clamp-3">
+                      <a href={item.enlace} target="_blank" rel="noopener noreferrer">
+                        {item.titulo}
+                      </a>
+                    </h3>
+                  </div>
+
+                  <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-600">
+                    <time>{new Date(item.fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</time>
+                    <a href={item.enlace} target="_blank" rel="noopener noreferrer" class="font-bold text-neutral-900 uppercase hover:underline">
+                      Ver Nota
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+
+    </main>
+
+    <!-- Footer Editorial -->
+    <footer class="bg-neutral-950 text-neutral-400 py-12 border-t border-neutral-900 text-center text-xs mt-24">
+      <div class="max-w-7xl mx-auto px-4 space-y-3">
+        <p class="font-serif text-lg font-bold tracking-wider text-white">SOY LAGUNA MAGAZINE</p>
+        <p class="text-[11px] uppercase tracking-widest text-neutral-400">Negocios &bull; Liderazgo &bull; Lifestyle &bull; Torreón, Coahuila</p>
+        <p class="text-neutral-500 text-[10px] pt-4">&copy; {new Date().getFullYear()} Todos los derechos reservados. Portal automatizado.</p>
+      </div>
+    </footer>
+
+  </body>
+</html>

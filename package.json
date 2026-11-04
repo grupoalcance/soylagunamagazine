@@ -1,0 +1,20 @@
+{
+  "name": "soylagunamagazine",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.4",
+    "astro": "^7.4.5",
+    "rss-parser": "^3.13.0",
+    "tailwindcss": "^4.3.4"
+  }
+}
